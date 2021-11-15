@@ -16,7 +16,9 @@ class CreateTransactions extends Migration
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
             // This is where you type your code
-
+            $table->foreignId('book_id')->unsigned();
+            $table->foreignId('user_id')->unsigned();
+            $table->date('deadline');
             $table->timestamps();
         });
     }
