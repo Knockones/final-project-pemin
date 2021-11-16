@@ -18,13 +18,13 @@ $router->get('/', function () use ($router) {
 });
 
 $router->group(['prefix' => 'auth'], function () use ($router) {
-    $router->post('/register', function () {
-        // TODO: Routes this to the right controller
-    });
+    $router->post('/register', [
+        'uses' => 'AuthController@register',
+    ]);
 
-    $router->post('/login', function () {
-        // TODO: Routes this to the right controller
-    });
+    $router->post('/login', [
+        'uses' => 'AuthController@login',
+    ]);
 });
 
 $router->group(['prefix' => 'books'], function () use ($router) {
