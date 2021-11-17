@@ -103,70 +103,58 @@ class BookController extends Controller
         ], 201);
     }
 
-    public function update(Request $request,$id)
+    public function update(Request $request,$bookId)
     {
-        # admin middleware checking
         if ($request->user->role != 'admin') {
             return response()->json([
                 'success' => false,
                 'message' => 'Forbidden access',
             ], 401);
         }
-    $title = $request->input('title');
-    $description = $request->input('description');
-    $author = $request->input('author');
-    $year = $request->input('year');
-    $synopsis = $request->input('synopsis');
-    $stock = $request->input('stock');
 
-    if ($title||$description||$author
-    ||$year||$synopsis||$stock){
-        $book = Book::find($id);
-        if (!$book){
+        $book = Book::find($bookId);
+
+        if (!$book) {
             return response()->json([
-              'success' => false,
-              'message' => 'Book not found!',
-            ],404);
-          }    
-        $book -> title = $title ? $title : $book->title;
-        $book -> description = $description ? $description : $book->description;
-        $book -> author = $author ? $author : $book->author;
-        $book -> year = $year ? $year : $book->year;
-        $book -> synopsis = $synopsis ? $synopsis : $book->synopsis;
-        $book -> stock = $stock ? $stock : $book->stock;
-        $book -> update();
+                'success' => false,
+                'message' => 'Book not found'
+            ], 404);
+        }
+
+        $book->update($request->all());
+
         return response()->json([
             'success' => true,
-            'message' => 'Berhasil',
+            'message' => 'A book updated',
             'data' =>[
                 'book' => $book
             ]
         ], 200);
     }
-    }
 
-    public function destroy (Request $request, $id)
+    public function destroy (Request $request, $bookId)
     {
-        # admin middleware checking
         if ($request->user->role != 'admin') {
             return response()->json([
                 'success' => false,
                 'message' => 'Forbidden access',
             ], 401);
         }
-        $book = Book::find($id);
+
+        $book = Book::find($bookId);
 
         if (!$book){
-          return response()->json([
-            'success' => false,
-            'message' => 'Book not found!',
-          ],404);
+            return response()->json([
+                'success' => false,
+                'message' => 'Book not found!',
+            ],404);
         }
-        $book->delete($id);
+
+        $book->delete($bookId);
 
         return response()->json([
-          'success' => true,
-          'message' => 'Book is Deleted',
+            'success' => true,
+            'message' => 'Book is Deleted',
         ], 200);
     }
 }
