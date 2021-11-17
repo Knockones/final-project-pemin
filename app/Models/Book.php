@@ -12,8 +12,12 @@ class Book extends Model
      *
      * @var array
      */
+
+    protected $table = 'books';
     protected $fillable = [
         // TODO: Insert your fillable fields
+        'title', 'description', 'author', 
+        'year', 'synopsis', 'stock'
     ];
 
     /**
