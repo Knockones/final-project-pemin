@@ -101,5 +101,31 @@ class BookController extends Controller
                 'book' => $newBook,
             ],
         ], 201);
-      }
+    }
+
+    public function update(Request $request)
+    {
+        # admin middleware checking
+        if ($request->user->role != 'admin') {
+            return response()->json([
+                'success' => false,
+                'message' => 'Forbidden access',
+            ], 401);
+        }
+
+        # TODO : write your code below
+    }
+
+    public function delete(Request $request)
+    {
+        # admin middleware checking
+        if ($request->user->role != 'admin') {
+            return response()->json([
+                'success' => false,
+                'message' => 'Forbidden access',
+            ], 401);
+        }
+
+        # TODO : write your code below
+    }
 }

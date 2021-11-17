@@ -84,13 +84,15 @@ $router->group(['middleware' => ['auth', 'admin']], function () use ($router) {
             'uses' => 'BookController@create',
         ]);
 
-        $router->put('/{bookId}', function () {
+        $router->put('/{bookId}', [
             // TODO: Routes this to the right controller
-        });
+            'uses' => 'BookController@update',
+        ]);
 
-        $router->delete('/{bookId}', function () {
+        $router->delete('/{bookId}', [
             // TODO: Routes this to the right controller
-        });
+            'uses' => 'BookController@destroy',
+        ]);
     });
 
     $router->group(['prefix' => 'transactions'], function () use ($router) {
