@@ -32,12 +32,12 @@ $router->group(['prefix' => 'auth'], function () use ($router) {
 $router->group(['prefix' => 'books'], function () use ($router) {
     $router->get('/', [
         // TODO: Routes this to the right controller
-        'uses' => 'BookController@showAllBook',
+        'uses' => 'BookController@index',
     ]);
 
     $router->get('/{bookId}', [
         // TODO: Routes this to the right controller
-        'uses' => 'BookController@getIdBook',
+        'uses' => 'BookController@show',
     ]);
 });
 
@@ -81,7 +81,7 @@ $router->group(['middleware' => ['auth', 'admin']], function () use ($router) {
     $router->group(['prefix' => 'books'], function () use ($router) {
         $router->post('/', [
             // TODO: Routes this to the right controller
-            'uses' => 'BookController@storeBook',
+            'uses' => 'BookController@create',
         ]);
 
         $router->put('/{bookId}', function () {
