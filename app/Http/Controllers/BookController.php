@@ -60,12 +60,7 @@ class BookController extends Controller
     }
 
     public function create(Request $request) {
-        if ($request->user->role != 'admin') {
-            return response()->json([
-                'success' => false,
-                'message' => 'Forbidden access',
-            ], 401);
-        }
+        $this->isNotAdminResponse($request->user);
 
         $complete = isset(
             $request->title,
@@ -105,12 +100,7 @@ class BookController extends Controller
 
     public function update(Request $request,$bookId)
     {
-        if ($request->user->role != 'admin') {
-            return response()->json([
-                'success' => false,
-                'message' => 'Forbidden access',
-            ], 401);
-        }
+        $this->isNotAdminResponse($request->user);
 
         $book = Book::find($bookId);
 
@@ -134,12 +124,7 @@ class BookController extends Controller
 
     public function destroy (Request $request, $bookId)
     {
-        if ($request->user->role != 'admin') {
-            return response()->json([
-                'success' => false,
-                'message' => 'Forbidden access',
-            ], 401);
-        }
+        $this->isNotAdminResponse($request->user);
 
         $book = Book::find($bookId);
 
@@ -156,5 +141,15 @@ class BookController extends Controller
             'success' => true,
             'message' => 'Book is Deleted',
         ], 200);
+    }
+
+    private function isNotAdminResponse($user)
+    {
+        if (!$user->hasRole('admin')) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Forbidden access',
+            ], 401);
+        }
     }
 }

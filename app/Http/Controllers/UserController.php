@@ -21,12 +21,7 @@ class UserController extends Controller
     // TODO: Create user logic
     public function index(Request $request)
     {
-        if ($request->user->role != "admin") {
-            return response()->json([
-                'success' => false,
-                'message' => 'Forbidden access',
-            ], 401);
-        }
+        $this->isNotAdminResponse($request->user);
 
         $users = User::all();
 
@@ -57,7 +52,7 @@ class UserController extends Controller
             ], 404);
         }
 
-        if ($request->user->role == 'admin') {
+        if ($request->user->hasRole('admin')) {
             return response()->json([
                 'success' => true,
                 'message' => 'A user grabbed',
@@ -67,7 +62,7 @@ class UserController extends Controller
             ], 200);
         }
 
-        if ($user->email != $request->user->sub) {
+        if ($user->email != $request->user->email) {
             return response()->json([
                 'success' => false,
                 'message' => 'Forbidden get other user',
@@ -94,7 +89,7 @@ class UserController extends Controller
             ], 404);
         }
 
-        if ($user->email != $request->user->sub) {
+        if ($user->email != $request->user->email) {
             return response()->json([
                 'success' => false,
                 'message' => 'Forbidden get other user',
@@ -123,7 +118,7 @@ class UserController extends Controller
             ], 404);
         }
 
-        if ($user->email != $request->user->sub) {
+        if ($user->email != $request->user->email) {
             return response()->json([
                 'success' => false,
                 'message' => 'Forbidden get other user',
@@ -136,5 +131,15 @@ class UserController extends Controller
             'success' => true,
             'message' => 'A user deleted',
         ], 200);
+    }
+
+    private function isNotAdminResponse($user)
+    {
+        if (!$user->hasRole('admin')) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Forbidden access',
+            ], 401);
+        }
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\User;
 use Closure;
 use Exception;
 use Firebase\JWT\ExpiredException;
@@ -40,11 +41,20 @@ class AuthMiddleware
         } catch(Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'An error while decoding token.'
+                'message' => $e->getMessage(),
             ], 500);
         }
 
-        $request->user = $payload;
+        $user = User::where('email', $payload->sub)->first();
+
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'User not found in token'
+            ], 404);
+        }
+
+        $request->user = $user;
 
         return $next($request);
     }
