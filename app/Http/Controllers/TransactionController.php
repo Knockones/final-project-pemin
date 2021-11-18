@@ -20,10 +20,29 @@ class TransactionController extends Controller
     // TODO: Create transaction logic
     public function create(Request $request)
     {
-        return response()->json([
-            'success' => true,
-            'message' => 'Endpoint reached'
-        ], 200);
+        $book_id = $request->input('book_id');
+        $user_id = $request->input('user_id');
+        $deadline = $request->input('deadline');
+
+        $register = Transaction::create([
+            'book_id' => $book_id,
+            'user_id' => $user_id,
+            'deadline' => $deadline
+        ]);
+
+        if($register){
+            return response()->json([
+                'success' => true,
+                'message' => 'Register Success!',
+                'data' => $register
+            ], 200);
+        }else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Register Failed!',
+                'data' => ''
+            ], 400);
+        }
     }
 
     public function show(Request $request, $transactionId)
@@ -102,11 +121,19 @@ class TransactionController extends Controller
         }
     }
 
-    public function update(Request $request)
+    public function update(Request $request, $transactionId)
     {
+    
+        $transaction = Transaction::where('id', $transactionId)->first();
+    
+        $transaction->book_id = $request->book_id;
+        $transaction->user_id = $request->user_id;
+        $transaction->deadline = $request->deadline;
+        $transaction->save();
+    
         return response()->json([
-            'success' => true,
-            'message' => 'Endpoint reached'
+          'success' => true, 
+          'message'=>'Data Has Been Updated'
         ], 200);
     }
 
