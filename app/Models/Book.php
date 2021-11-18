@@ -16,7 +16,7 @@ class Book extends Model
     protected $table = 'books';
     protected $fillable = [
         // TODO: Insert your fillable fields
-        'title', 'description', 'author', 
+        'title', 'description', 'author',
         'year', 'synopsis', 'stock'
     ];
 
@@ -28,4 +28,9 @@ class Book extends Model
     protected $hidden = [
         // TODO: Insert your hidden fields
     ];
+
+    public function transaction()
+    {
+        return $this->hasMany(Transaction::class, 'book_id');
+    }
 }

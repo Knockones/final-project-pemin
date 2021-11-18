@@ -35,4 +35,9 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     {
         return $this->role == $role;
     }
+
+    public function transaction()
+    {
+        return $this->hasMany(Transaction::class, 'user_id');
+    }
 }
