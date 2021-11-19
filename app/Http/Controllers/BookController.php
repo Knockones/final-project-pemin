@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Book;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class BookController extends Controller
 {
@@ -62,14 +63,14 @@ class BookController extends Controller
     public function create(Request $request) {
         $this->isNotAdminResponse($request->user);
 
-        $complete = isset(
-            $request->title,
-            $request->description,
-            $request->author,
-            $request->year,
-            $request->synopsis,
-            $request->stock,
-        );
+        $validation = Validator::make($request->all(), [
+            'title' => ['required'],
+            'description' => ['required'],
+            'author' => ['required'],
+            'year' => ['required'],
+            'synopsis' => ['required'],
+            'stock' => ['required'],
+        ]);
 
         $body = [
             'title' => $request->title ?? 'Lorem',
@@ -82,7 +83,7 @@ class BookController extends Controller
 
         $newBook = Book::create($body);
 
-        if (!$complete) {
+        if ($validation->fails()) {
             return response()->json([
                 'success' => true,
                 'message' => 'Incomplete book added',

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Book;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class TransactionController extends Controller
 {
@@ -21,6 +22,17 @@ class TransactionController extends Controller
     // TODO: Create transaction logic
     public function create(Request $request)
     {
+        $validation = Validator::make($request->all(), [
+            'book_id' => ['required'],
+        ]);
+
+        if ($validation->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Empty field at transaction',
+            ], 400);
+        }
+
         $book_id = $request->book_id;
         $user_id = $request->user->id;
         $deadline = $request->deadline;
