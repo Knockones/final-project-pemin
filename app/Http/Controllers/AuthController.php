@@ -7,6 +7,7 @@ use Firebase\JWT\JWT;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
@@ -23,18 +24,26 @@ class AuthController extends Controller
     // TODO: Create auth logic
     public function register(Request $request)
     {
-        $name = $request->name;
-        $email = $request->email;
-        $password = $request->password;
+        $validation = Validator::make($request->all(), [
+            'name' => ['required'],
+            'email' => ['required', 'email'],
+            'password' => ['required'],
+        ]);
 
-        if (!isset($name, $email, $password)) {
+        if ($validation->fails()) {
             return response()->json([
                 'success' => false,
                 'message' => 'Empty field',
             ], 400);
         }
 
-        $user = User::where('email', $email)->first();
+        $input = [
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+        ];
+
+        $user = User::where('email', $input['email'])->first();
 
         if ($user) {
             return response()->json([
@@ -43,7 +52,7 @@ class AuthController extends Controller
             ], 400);
         }
 
-        $newUser = User::create($request->all());
+        $newUser = User::create($input);
 
         return response()->json([
             'success' => true,
@@ -68,7 +77,7 @@ class AuthController extends Controller
             ], 404);
         }
 
-        if ($password !== $user->password) {
+        if (!Hash::check($password, $user->password)) {
             return response()->json([
                 'success' => false,
                 'message' => 'Credential not match',
