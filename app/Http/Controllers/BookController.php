@@ -73,10 +73,10 @@ class BookController extends Controller
 
         $body = [
             'title' => $request->title ?? 'Lorem',
-            'description' => $request->description ?? 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Incidunt doloribus optio molestiae, id reiciendis maxime alias architecto inventore sit corrupti, totam obcaecati enim repudiandae quasi. Labore unde ab ex illum.',
+            'description' => $request->description ?? 'Lorem, ipsum dolor sit amet',
             'author' => $request->author ?? 'Lorem',
             'year' => $request->year ?? '0000',
-            'synopsis' => $request->synopsis ?? 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Incidunt doloribus optio molestiae, id reiciendis maxime alias architecto inventore sit corrupti, totam obcaecati enim repudiandae quasi. Labore unde ab ex illum.',
+            'synopsis' => $request->synopsis ?? 'Lorem, ipsum dolor sit amet',
             'stock' => $request->stock ?? '0',
         ];
 
