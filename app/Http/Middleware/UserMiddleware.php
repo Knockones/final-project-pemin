@@ -8,7 +8,7 @@ use Firebase\JWT\ExpiredException;
 use Firebase\JWT\JWT;
 use Illuminate\Support\Str;
 
-class AdminMiddleware
+class UserMiddleware
 {
     /**
      * Handle an incoming request.
@@ -19,10 +19,10 @@ class AdminMiddleware
      */
     public function handle($request, Closure $next)
     {
-        if (!$request->user->hasRole('admin')) {
+        if (!$request->user->hasRole('user')) {
             return response()->json([
                 'success' => false,
-                'message' => 'Unauthorized access for non admin'
+                'message' => 'Unauthorized access for non user'
             ], 403);
         }
 

@@ -18,7 +18,7 @@ class CreateTransactions extends Migration
             // This is where you type your code
             $table->foreignId('book_id')->unsigned();
             $table->foreignId('user_id')->unsigned();
-            $table->date('deadline');
+            $table->date('deadline')->nullable();
             $table->timestamps();
         });
     }
