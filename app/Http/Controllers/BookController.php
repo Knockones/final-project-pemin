@@ -60,9 +60,8 @@ class BookController extends Controller
       ], 200);
     }
 
-    public function create(Request $request) {
-        $this->isNotAdminResponse($request->user);
-
+    public function create(Request $request)
+    {
         $validation = Validator::make($request->all(), [
             'title' => ['required'],
             'description' => ['required'],
@@ -101,8 +100,6 @@ class BookController extends Controller
 
     public function update(Request $request,$bookId)
     {
-        $this->isNotAdminResponse($request->user);
-
         $book = Book::find($bookId);
 
         if (!$book) {
@@ -125,8 +122,6 @@ class BookController extends Controller
 
     public function destroy (Request $request, $bookId)
     {
-        $this->isNotAdminResponse($request->user);
-
         $book = Book::find($bookId);
 
         if (!$book){
@@ -142,15 +137,5 @@ class BookController extends Controller
             'success' => true,
             'message' => 'Book is Deleted',
         ], 200);
-    }
-
-    private function isNotAdminResponse($user)
-    {
-        if (!$user->hasRole('admin')) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Forbidden access',
-            ], 401);
-        }
     }
 }
