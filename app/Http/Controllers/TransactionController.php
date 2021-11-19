@@ -158,11 +158,22 @@ class TransactionController extends Controller
         ], 200);
     }
 
-    public function destroy(Request $request)
+    public function destroy($transactionId)
     {
+        $transaction = Transaction::find($transactionId);
+
+        if (!$transaction) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Transaction not found'
+            ], 404);
+        }
+
+        $transaction->delete($transactionId);
+
         return response()->json([
             'success' => true,
-            'message' => 'Endpoint reached'
+            'message' => 'Transaction is Deleted',
         ], 200);
     }
 
