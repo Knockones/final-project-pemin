@@ -118,28 +118,23 @@ class TransactionController extends Controller
 
     public function index(Request $request)
     {
-        if ($request->user->hasRole('admin')) {
-            $transactions = Transaction::all();
+        $user = $request->user;
+        $transactions = $user->hasRole('admin') ? Transaction::all() : Transaction::where('user_id', $user->id)->get();
+
+        if (!$transactions) {
             return response()->json([
                 'success' => true,
-                'message' => 'All transactions grabbed by admin',
-                'data' => [
-                    'transactions' => $this->extract($transactions),
-                ]
+                'message' => "No transactions listed",
             ], 200);
         }
 
-        if ($request->user->hasRole('user')) {
-            $user = $request->user;
-            $transactions = Transaction::where('user_id', $user->id)->get();
-            return response()->json([
-                'success' => true,
-                'message' => 'All transactions grabbed by user',
-                'data' => [
-                    'transactions' => $this->extract($transactions),
-                ]
-            ], 200);
-        }
+        return response()->json([
+            'success' => true,
+            'message' => "All transactions grabbed by $user->role",
+            'data' => [
+                'transactions' => $this->extract($transactions),
+            ]
+        ], 200);
     }
 
     public function update(Request $request, $transactionId)
