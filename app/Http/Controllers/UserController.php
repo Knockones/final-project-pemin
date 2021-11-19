@@ -21,8 +21,6 @@ class UserController extends Controller
     // TODO: Create user logic
     public function index(Request $request)
     {
-        $this->isNotAdminResponse($request->user);
-
         $users = User::all();
 
         if ($users->isEmpty()) {
@@ -131,15 +129,5 @@ class UserController extends Controller
             'success' => true,
             'message' => 'A user deleted',
         ], 200);
-    }
-
-    private function isNotAdminResponse($user)
-    {
-        if (!$user->hasRole('admin')) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Forbidden access',
-            ], 401);
-        }
     }
 }
